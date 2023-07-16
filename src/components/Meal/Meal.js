@@ -1,5 +1,6 @@
 import Card from '../UI/Card';
 import classes from './Meal.module.css'
+import MealForm from './MealForm';
 
 const Meal = (props) => {
     const price =`${props.price.toFixed(2)} zł`;
@@ -13,7 +14,9 @@ const Meal = (props) => {
             {price}
         </div>
         </div>
-       
+       <div>
+        <MealForm />
+       </div>
     </li>
     
 
