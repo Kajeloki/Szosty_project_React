@@ -10,20 +10,10 @@ const Cart = props => {
     const [isClosed, setIsClosed] = useState(false);
     const hasItems = ctx.items.length>0;
     const onAddHandler =item =>{
-        // ctx.addItem({
-        //     id: props.id,
-        //     name: props.name,
-        //     amount: props.amount,
-        //     price: props.price
-        // })
+        ctx.addItem({...item, amount:1})
     }
     const onRemoveHandler =id =>{
-        // ctx.removeItem({
-        //     id: id,
-        //     name: props.name,
-        //     amount: props.amount,
-        //     price: props.price
-        // })
+        ctx.removeItem(id)
     }
     const cartItems =
         <ul className={classes['cart-items']}>
