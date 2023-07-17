@@ -6,7 +6,6 @@ import Modal from '../Cart/Modal';
 import Cart from '../Cart/Cart';
 
 const Header = (props) => {
-const ctx=useContext;
     
     const submitHandler = event=>{
         event.preventDefault();

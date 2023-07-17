@@ -31,7 +31,7 @@ const AvailableMeals =(props)=>{
       ];
 
       const mealsList=DUMMY_MEALS.map(meal=>
-        <Meal name={meal.name} description={meal.description} price={meal.price} key={meal.id}/>
+        <Meal name={meal.name} description={meal.description} price={meal.price} key={meal.id} id={meal.id}/>
       );
 return <Card className={classes.meals}>
     <ul>

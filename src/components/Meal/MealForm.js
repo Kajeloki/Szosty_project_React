@@ -19,7 +19,7 @@ const onSubmitHandler =(event)=>{
     setAmountIsValid(false);
     return;
    }
-   props.onAddToCart(enteredMealAmount)
+   props.onAddToCart(numberEnteredMealAmount)
   
 }
 return <form className={classes.form} onSubmit={onSubmitHandler} >
