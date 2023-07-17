@@ -16,7 +16,7 @@ function App(props) {
   }
   return (
     <CartProvider >
-      {isReady && <Cart onClose={hideCartHandler}/>}
+      {isReady && <Cart onClose={hideCartHandler} />}
       <Header onCheck={showCartHandler}/>
       <main>
         <Meals />
