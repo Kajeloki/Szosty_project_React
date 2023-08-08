@@ -5,12 +5,18 @@ import { useEffect, useState } from 'react';
 
 const AvailableMeals =(props)=>{
   const [meals, setMeals]=useState([]);
+  const [isLoading, setIsLoading]= useState(true);
+  const [httpError, setError]= useState();
 
   useEffect(()=>{
     const fetchHandler = async ()=>{
       const response = await fetch('https://strona-do-zamawiania-jedzenia-default-rtdb.europe-west1.firebasedatabase.app/meals.json');
       const data = await response.json();
       
+      if(!response.ok)
+      {
+        throw new Error('Coś poszło nie tak');
+      }
       for(const key in data)
       loadedMeals.push({
     id: key,
@@ -19,14 +25,30 @@ const AvailableMeals =(props)=>{
     price: data[key].price
   
     });
-    setMeals(loadedMeals)
+    setMeals(loadedMeals);
+    setIsLoading(false);
     };
-
-    fetchHandler();
+    
+      fetchHandler().catch(error =>{
+        setIsLoading(false);
+        setError(error.message);
+      });
+    
+    
     },[])
   const loadedMeals = [];
- 
-
+ if(httpError)
+ {
+  return <section className={classes.mealsError}>
+    <p>{httpError}</p>
+  </section>
+ }
+if(isLoading)
+{
+  return <section className={classes.mealsLoading}>
+    <p>Wczytywanie...</p>
+  </section>
+}
       const mealsList=meals.map(meal=>
         <Meal name={meal.name} description={meal.description} price={meal.price} key={meal.id} id={meal.id}/>
         
