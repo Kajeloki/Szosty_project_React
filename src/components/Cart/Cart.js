@@ -3,17 +3,28 @@ import React, { useState, useContext } from 'react';
 import Modal from './Modal';
 import AuthContext from '../../store/AuthContext';
 import CartItem from './CartItem';
+import Checkout from './Checkout';
 
 const Cart = props => {
 
     const ctx = useContext(AuthContext);
     const [isClosed, setIsClosed] = useState(false);
+    const [isOrdered, setIsOrdered] = useState(false);
     const hasItems = ctx.items.length>0;
     const onAddHandler =item =>{
         ctx.addItem({...item, amount:1})
     }
     const onRemoveHandler =id =>{
         ctx.removeItem(id)
+    }
+
+    const cancelHandler =(event)=>{
+        event.preventDefault()
+        setIsOrdered(false);
+    }
+
+    const orderHandler =()=>{
+        setIsOrdered(true);
     }
     const cartItems =
         <ul className={classes['cart-items']}>
@@ -37,10 +48,13 @@ const Cart = props => {
             <span >Całkowita kwota</span>
             <span>{totalAmount} zł</span>
         </div>
+        {isOrdered && <Checkout onCancel={cancelHandler}/>}
         <div className={classes.actions}>
-            <button className={classes['button--alt']} onClick={props.onClose}>Zamknij</button>
-            {hasItems &&<button className={classes.button}>Zamów</button>}
+            
+            {!isOrdered && <button className={classes['button--alt']} onClick={props.onClose}>Zamknij</button>}
+            {hasItems && !isOrdered &&<button className={classes.button} onClick={orderHandler}>Zamów</button>}
         </div>
+        
     </Modal>
 };
 export default Cart;
