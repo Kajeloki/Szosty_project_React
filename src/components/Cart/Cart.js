@@ -6,7 +6,8 @@ import CartItem from './CartItem';
 import Checkout from './Checkout';
 
 const Cart = props => {
-
+    const [isSubmiting, setIsSubmiting]=useState(false);
+    const [isSubmited, setIsSubmited]=useState(false);
     const ctx = useContext(AuthContext);
     const [isClosed, setIsClosed] = useState(false);
     const [isOrdered, setIsOrdered] = useState(false);
@@ -42,18 +43,41 @@ const Cart = props => {
                 )}
         </ul>
         const totalAmount= ctx.totalAmount.toFixed(2);
-    return <Modal onClose={props.onClose}>
-        {cartItems}
+
+        const submitOrderHandler = async(userData)=>{
+            setIsSubmiting(true)
+            await fetch("https://strona-do-zamawiania-jedzenia-default-rtdb.europe-west1.firebasedatabase.app/orders.json", {
+                method: 'POST',
+                body: JSON.stringify({
+                    user: userData,
+                    orderedItems: ctx.items
+                })
+            })
+            setIsSubmiting(false);
+            setIsSubmited(true);
+            ctx.clearCart();
+        };
+
+        const cartModalContent = <React.Fragment>
+            {cartItems}
         <div className={classes.total}>
             <span >Całkowita kwota</span>
             <span>{totalAmount} zł</span>
         </div>
-        {isOrdered && <Checkout onCancel={cancelHandler}/>}
+        {isOrdered && <Checkout onConfirm={submitOrderHandler} onCancel={props.onClose}/>}
         <div className={classes.actions}>
             
             {!isOrdered && <button className={classes['button--alt']} onClick={props.onClose}>Zamknij</button>}
             {hasItems && !isOrdered &&<button className={classes.button} onClick={orderHandler}>Zamów</button>}
         </div>
+        </React.Fragment>;
+
+        const isSubmitingModalContent = <p>Wysyłanie danych zgłoszenia...</p>;
+        const isSubmitedModalContent = <p>Zgłoszenie zostało pomyślnie wysłane</p>
+    return <Modal onClose={props.onClose}>
+        {!isSubmiting && !isSubmited && cartModalContent}
+        {isSubmiting && !isSubmited && isSubmitingModalContent}
+        {!isSubmiting && isSubmited && isSubmitedModalContent}
         
     </Modal>
 };
